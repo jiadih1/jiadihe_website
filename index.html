@@ -1,0 +1,49 @@
+---
+layout: default
+slug_class: about
+---
+<section class="wrap about-opening">
+  <p class="kicker">{{ site.tagline }}</p>
+  <p class="opening">My work sits across education, policy, business, and public institutions, shaped by both academic training and <span class="nowrap">hands-on</span> institution building.</p>
+</section>
+
+<section class="wrap split">
+  <div class="split-body prose">
+    <p>I studied Government, Statistics, and Women’s and Gender Studies at Georgetown University before completing my M.Ed. in Education Policy and Analysis at the Harvard Graduate School of Education, with additional study at Harvard Kennedy School and MIT.</p>
+    <p>Across research, institution building, entrepreneurship, and public engagement, education has remained a consistent thread, from policy and organizational work to learning, technology, and opportunity.</p>
+    <p>I am drawn to work that connects research with practice and leads to something tangible, from a policy idea to a program, partnership, or new initiative.</p>
+  </div>
+</section>
+
+<section class="wrap split" aria-labelledby="roles-h">
+  <h2 id="roles-h" class="split-label">Selected Roles</h2>
+  <ul class="split-body roles">
+    {% for r in site.data.roles %}
+    <li><span class="role">{{ r.role }}</span>{% if r.org %}<span class="org">{{ r.org }}</span>{% endif %}</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="wrap split" aria-labelledby="found-h">
+  <h2 id="found-h" class="split-label">Academic Foundations</h2>
+  <div class="split-body prose">
+    <p>My academic background brings together politics, quantitative analysis, and education, with an interest in the legal and institutional structures that shape public systems. This foundation has shaped the way I approach questions of institutions, evidence, learning, and technology.</p>
+    <p>My work connects these perspectives across education, opportunity, and mobility, with particular attention to policy, institutional decision-making, and the relationship between education and broader social and economic change.</p>
+  </div>
+</section>
+
+<section class="wrap split" aria-labelledby="edu-h">
+  <h2 id="edu-h" class="split-label">Across Education</h2>
+  <div class="split-body">
+    <p class="prose lead-in">My work in education spans public policy and institutional design, learning and technology, higher education, and pathways into work.</p>
+  </div>
+  <ul class="modules" aria-label="Scope of work in education">
+    {% for m in site.data.education_modules %}
+    <li class="module">
+      <span class="module-num">{{ forloop.index | prepend: "0" }}</span>
+      <h3>{{ m.title }}</h3>
+      <p>{{ m.text }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</section>

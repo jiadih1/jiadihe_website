@@ -1,0 +1,29 @@
+---
+layout: default
+title: In the World
+permalink: /in-the-world/
+slug_class: world
+description: Selected talks, institutions, programs, collaborations, and public engagements across education, technology, policy, and international work.
+---
+<header class="wrap page-head">
+  <h1 class="page-title">In the World</h1>
+  <p class="page-intro">Selected talks, institutions, programs, collaborations, and public engagements across education, technology, policy, and international work.</p>
+</header>
+
+<section class="wrap gallery" aria-label="Photographs">
+  {% for w in site.data.world %}
+  <figure class="shot shot-{{ w.size | default: 'm' }}{% if w.placeholder %} is-placeholder{% endif %}">
+    {% if w.image %}
+      <img src="{{ w.image | relative_url }}" alt="{{ w.alt | default: w.caption | escape }}" loading="lazy">
+    {% else %}
+      <div class="shot-empty" aria-hidden="true"><span>Photo</span></div>
+    {% endif %}
+    {% if w.caption or w.kicker %}
+    <figcaption>
+      {% if w.kicker %}<span class="shot-kicker">{{ w.kicker }}</span>{% endif %}
+      {% if w.caption %}<span class="shot-caption">{{ w.caption }}</span>{% endif %}
+    </figcaption>
+    {% endif %}
+  </figure>
+  {% endfor %}
+</section>

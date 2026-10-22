@@ -1,0 +1,60 @@
+---
+layout: default
+slug_class: paper
+---
+{% assign theme = site.data.themes | where: "id", page.theme | first %}
+<article class="wrap paper">
+  <a class="back" href="{{ '/research/' | relative_url }}#theme-{{ page.theme }}">
+    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+    Ideas &amp; Research
+  </a>
+
+  <header class="paper-head">
+    <p class="category"><span>{{ theme.id }}</span>{{ theme.title }}</p>
+    <h1 class="paper-title">{{ page.title }}</h1>
+    <p class="tags">{{ page.tags | join: " · " }}</p>
+    <p class="paper-desc">{{ page.description }}</p>
+    {% if page.authors or page.credit or page.context %}
+    <dl class="paper-meta">
+      {% if page.authors %}<div><dt>Authors</dt><dd>{{ page.authors | join: ", " }}</dd></div>{% endif %}
+      {% if page.credit %}<div><dt>Format</dt><dd>{{ page.credit }}</dd></div>{% endif %}
+      {% if page.context %}<div><dt>Academic context</dt><dd>{{ page.context.name }} · {{ page.context.institution }}</dd></div>{% endif %}
+    </dl>
+    {% endif %}
+    <div class="actions">
+      {% if page.pdf %}
+        <a class="btn btn-primary" href="#reader">Read paper</a>
+        <a class="btn" href="{{ page.pdf | relative_url }}" target="_blank" rel="noopener">Open PDF <span aria-hidden="true">↗</span></a>
+      {% elsif page.external %}
+        <a class="btn btn-primary" href="{{ page.external }}" target="_blank" rel="noopener">{{ page.external_label | default: "View project" }} <span aria-hidden="true">↗</span></a>
+      {% endif %}
+    </div>
+  </header>
+
+  {% if page.pdf %}
+  <section id="reader" class="reader" data-pdf="{{ page.pdf | relative_url }}" aria-label="Paper preview">
+    <div class="reader-bar">
+      <span class="reader-status" aria-live="polite">Loading paper…</span>
+      <a href="{{ page.pdf | relative_url }}" target="_blank" rel="noopener">Open PDF <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="reader-pages"></div>
+    <noscript>
+      <object class="reader-fallback" data="{{ page.pdf | relative_url }}" type="application/pdf"><a href="{{ page.pdf | relative_url }}">Open the PDF</a></object>
+    </noscript>
+  </section>
+  {% elsif page.external %}
+  {%- comment -%} Adobe Express forbids framing (CSP frame-ancestors), so link out instead of embedding. {%- endcomment -%}
+  <section class="reader" aria-label="Project">
+    <a class="project-card" href="{{ page.external }}" target="_blank" rel="noopener">
+      <span class="project-kicker">Interactive project · Adobe Express</span>
+      <span class="project-title">{{ page.title }}</span>
+      <span class="project-cta">{{ page.external_label | default: "View project" }} <span aria-hidden="true">↗</span></span>
+    </a>
+  </section>
+  {% endif %}
+</article>
+
+{% if page.pdf %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
+<script src="{{ '/assets/js/reader.js' | relative_url }}" defer></script>
+{% endif %}

@@ -1,0 +1,13 @@
+# The six research themes, in display order.
+- id: "01"
+  title: Political Order, Institutions & Governance
+- id: "02"
+  title: Public Systems, Data & Accountability
+- id: "03"
+  title: Education as a Public System
+- id: "04"
+  title: Equity, Disability & Identity
+- id: "05"
+  title: Learning, Measurement & Technology
+- id: "06"
+  title: Future of Work & Economic Mobility

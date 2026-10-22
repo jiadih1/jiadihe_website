@@ -1,0 +1,123 @@
+% preprint.sty -- shared house style for Jiadi He's papers.
+% Compile every paper with XeLaTeX:  latexmk -xelatex main.tex
+% Each main.tex does \usepackage{../_shared/preprint} (via TEXINPUTS, see build.sh).
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{preprint}[2026/10/21 Jiadi He preprint style]
+
+% ---------- fonts & page ----------
+\RequirePackage{fontspec}% defaults to Latin Modern (OpenType)
+\RequirePackage[letterpaper,margin=1in,headheight=14pt]{geometry}
+\RequirePackage[protrusion=true]{microtype}
+\RequirePackage{amsmath,amssymb}
+\RequirePackage{graphicx}
+\RequirePackage{booktabs,array,tabularx,multirow,longtable}
+\RequirePackage[shortlabels]{enumitem}
+\RequirePackage[font=small,labelfont=bf,skip=6pt]{caption}
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{fancyhdr}
+\RequirePackage{titlesec}
+\RequirePackage[blocks]{authblk}
+\RequirePackage{xurl}
+\RequirePackage{newunicodechar}
+\RequirePackage{etoolbox}
+
+\definecolor{linkblue}{RGB}{20,50,140}
+\RequirePackage[colorlinks=true,linkcolor=linkblue,citecolor=linkblue,
+                urlcolor=linkblue,hyperfootnotes=true,bookmarksnumbered=true,
+                pdfstartview=FitH]{hyperref}
+
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0pt}
+\linespread{1.04}
+\setlist{itemsep=2pt,topsep=4pt,leftmargin=2em}
+\setlength{\footnotesep}{9pt}
+\raggedbottom
+
+% Glyphs Latin Modern lacks in text mode
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{≤}{\ensuremath{\leq}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{×}{\ensuremath{\times}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{←}{\ensuremath{\leftarrow}}
+\newunicodechar{±}{\ensuremath{\pm}}
+\newunicodechar{−}{\ensuremath{-}}
+
+% ---------- metadata ----------
+% \shorttitle{Running head}   \keywords{a; b; c}
+% \papernote{One italic line under the authors, e.g. "Policy memo prepared for ..."}
+\newcommand{\@shorttitle}{}
+\newcommand{\shorttitle}[1]{\renewcommand{\@shorttitle}{#1}}
+\newcommand{\@keywords}{}
+\newcommand{\keywords}[1]{\renewcommand{\@keywords}{#1}}
+\newcommand{\@papernote}{}
+\newcommand{\papernote}[1]{\renewcommand{\@papernote}{#1}}
+% \runningauthors{Dai, Wang, He \& Zhang} for co-authored papers
+\newcommand{\@runauthors}{J.~He}
+\newcommand{\runningauthors}[1]{\renewcommand{\@runauthors}{#1}}
+
+% ---------- authors (authblk) ----------
+\renewcommand\Authfont{\normalsize}
+\renewcommand\Affilfont{\small\itshape}
+\renewcommand\Authsep{\quad}
+\renewcommand\Authand{\quad}
+\renewcommand\Authands{\quad}
+\setlength{\affilsep}{0.35em}
+% \email{} inside \author{} records the address; \maketitle prints it under the affiliations.
+\newcommand{\@emailaddr}{}
+\DeclareRobustCommand{\email}[1]{\gdef\@emailaddr{#1}}
+
+% ---------- title block ----------
+\renewcommand{\maketitle}{%
+  \begingroup
+  \thispagestyle{plain}%
+  \begin{center}
+    \vspace*{-0.6em}%
+    {\LARGE\bfseries\@title\par}%
+    \vspace{1.15em}%
+    {\@author\par}%
+    \ifdefempty{\@emailaddr}{}{\vspace{0.35em}{\small\href{mailto:\@emailaddr}{\texttt{\@emailaddr}}\par}}%
+    \ifdefempty{\@papernote}{}{\vspace{0.7em}{\small\itshape\@papernote\par}}%
+    \vspace{0.6em}%
+  \end{center}
+  \endgroup
+  \hypersetup{pdftitle={\@title}}%
+}
+
+% ---------- abstract ----------
+\renewenvironment{abstract}{%
+  \begin{center}\small\bfseries Abstract\end{center}\vspace{-0.6em}%
+  \begin{quote}\small\noindent\ignorespaces}{%
+  \ifdefempty{\@keywords}{}{\par\vspace{0.6em}\noindent\textbf{Keywords:} \@keywords}%
+  \end{quote}\vspace{0.4em}}
+% For papers without an abstract: keywords line only.
+\newcommand{\keywordsline}{%
+  \ifdefempty{\@keywords}{}{\begin{quote}\small\noindent\textbf{Keywords:} \@keywords\end{quote}\vspace{0.4em}}}
+
+% ---------- headings ----------
+\titleformat{\section}{\large\bfseries}{\thesection}{0.75em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.75em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries\itshape}{\thesubsubsection}{0.6em}{}[.]
+\titlespacing*{\section}{0pt}{1.5ex plus .5ex minus .2ex}{0.8ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{1.2ex plus .4ex minus .2ex}{0.5ex plus .2ex}
+\titlespacing*{\subsubsection}{0pt}{1ex plus .3ex}{0.8em}
+
+% ---------- running heads ----------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.3pt}
+\fancyhead[L]{\small\itshape\@runauthors}
+\fancyhead[R]{\small\itshape\@shorttitle}
+\fancyfoot[C]{\small\thepage}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\fancyfoot[C]{\small\thepage}}
+
+% ---------- references ----------
+% \begin{references} \item Author (Year). Title. ... \end{references}
+\newenvironment{references}[1][References]{%
+  \section*{#1}\addcontentsline{toc}{section}{#1}%
+  \small
+  \begin{list}{}{\setlength{\leftmargin}{1.5em}\setlength{\itemindent}{-1.5em}%
+                 \setlength{\itemsep}{3pt}\setlength{\parsep}{0pt}\setlength{\labelwidth}{0pt}}%
+  \raggedright}{\end{list}}
+
+\endinput

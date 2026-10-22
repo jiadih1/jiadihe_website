@@ -1,0 +1,340 @@
+\documentclass[11pt]{article}
+\usepackage{preprint}
+
+\title{Observable Event-Summary Traces as a Measurement Problem: A Synthetic Learning-Analytics Audit}
+\author{Jiadi He\email{jh2288@georgetown.edu}}
+\shorttitle{Event-Summary Traces as a Measurement Problem}
+\keywords{learning analytics; synthetic data; process traces; measurement validity; learner-state estimation}
+
+\newcommand{\clip}{\operatorname{clip}}
+% two-line table cell (estimate over interval, or a wrapped header)
+\newcommand{\two}[2]{\begin{tabular}[t]{@{}l@{}}#1\\{}#2\end{tabular}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We examine what can—and cannot—be inferred from fixed typed event-summary traces in an explicitly specified synthetic learning process. Predictors reconstructed from summary rows exclude generator-only fields from the primary rich-observable set. We estimate a generator-defined post-session mastery scalar, next-session constructed support need, and next-task correctness, using learner-grouped splits and paired learner-cluster bootstrap intervals. In the reference population, mastery RMSE changes from 0.1182 to 0.1161 (favorable difference 0.0021); next-session support AUC changes from 0.5502 to 0.5601 (difference 0.0099), remaining weak in absolute terms; and next-task correctness AUC changes from 0.5175 to 0.5149 (difference −0.0026). Linear/logistic, random-forest, and gradient-boosting sensitivity analyses preserve the first two directions, while all next-correctness intervals include zero. These small results are conditional on one specified generator, 20 independently generated populations, and selected mechanism perturbations—not distinct educational worlds. This audit does not validate real-world measurement, intervention, or learning efficacy.
+\end{abstract}
+
+\begin{quote}
+\noindent\fcolorbox{black!55}{black!4}{%
+\begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+\small
+\vspace{2pt}
+\textbf{Notes for Practice}
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=4pt]
+\item A prediction target must be named precisely; a post-session synthetic label is not automatically an early-warning signal.
+\item For learning-analytics researchers and instrumentation designers, treat candidate fields as measurement choices: document provenance, timing, and actual platform availability before investing in empirical validation.
+\item This synthetic audit does not identify learners for support; predictive accuracy does not establish that an alert improves decisions or learning.
+\item Communicate uncertainty and preserve human oversight, contestability, data minimization, and access controls.
+\end{itemize}
+\vspace{1pt}
+\end{minipage}}
+\end{quote}
+
+\section{Introduction}
+
+Learning analytics (LA) uses data about learners and their contexts to understand and improve learning environments. In deployed systems, the available data are often page views, clicks, time on task, completion, attempts, and correctness. Such summaries can support prediction, but they compress the process through which a learner encounters an explanation, requests support, explores a representation, or recovers from difficulty. Generative and interactive environments may expose more process-level actions, yet additional detail does not automatically mean better measurement.
+
+This paper asks a narrower methodological question: under an explicit synthetic learning process, do event-summary features contain incremental information beyond conventional activity features? The question is about recoverability of a constructed latent state, not about whether an educational product improves grades, engagement, or teaching. No real students, teachers, schools, or human-subject data are represented.
+
+The paper makes three contributions. First, it grounds candidate trace families in educational theories of cognitive load, cognitive engagement, self-regulated learning, help seeking, formative feedback, and multiple representations. Second, it separates three information conditions: baseline, rich-observable, and rich-all. Third, it evaluates the comparison across independently generated populations and learner-cluster uncertainty, while explicitly treating the intervention label as a post-session synthetic condition rather than an early-warning diagnosis.
+
+\section{Educational foundations and measurement gap}
+
+LA is about learning rather than activity alone. Macfadyen and Dawson (2010) show the practical value of LMS-based early-warning variables, while Gašević et al. (2015) emphasize the need to connect analytics with learning theory and instructional practice. Knowledge tracing models changing knowledge across interactions (Corbett \& Anderson, 1995; Piech et al., 2015), but model flexibility does not resolve the meaning of the observations. Data-collection processes can alter the interpretation of student models (Pelánek et al., 2016), which is why the present study treats feature provenance and prediction time as part of the design.
+
+Cognitive-load theory motivates modeling a cost when task demand and learner sensitivity jointly make a task difficult (Sweller, 1988). Multimedia learning theory further emphasizes limited processing capacity, separate pictorial and verbal channels, and active processing (Mayer \& Moreno, 2003). Replay and pauses may therefore be candidate indicators of information management, but they can also indicate deliberate review or an interruption. They should not be treated as direct cognitive-load measures.
+
+The ICAP framework distinguishes passive, active, constructive, and interactive cognitive engagement (Chi \& Wylie, 2014). Operating an interactive interface is not equivalent to constructing an explanation. This distinction is central to the revised experiment: the rich-observable set uses logged actions, while the generator-derived productive-engagement variable is excluded from its primary comparison. Self-regulated learning theory also cautions against treating repetition as failure; review and retry can be strategic (Zimmerman, 2002). Help-seeking research similarly shows that access to help does not guarantee effective help use (Aleven et al., 2003). Hint count is therefore treated as ambiguous evidence whose meaning depends on difficulty, subsequent action, and outcome.
+
+Formative-feedback research supports observing what happens after support rather than merely counting its delivery (Shute, 2008). Multiple-representation research emphasizes that learning benefits depend on design, functions, and the cognitive tasks learners perform (Ainsworth, 2006). Scientific discovery learning with computer simulations requires hypothesis generation, experimentation, and interpretation, not only manipulation volume (De Jong \& Van Joolingen, 1998). Simulation-based learning can support complex skills when instructional scaffolding is appropriate, but evidence from instructional simulations cannot be transferred as an efficacy estimate for a methodological simulator (Chernikova et al., 2020).
+
+Synthetic-data work makes latent states inspectable and supports open methodological research (Berg et al., 2016; Hershkovitz et al., 2017; Dorodchi et al., 2019). It also warns that a model can perform well because the generated data share its assumptions (Flanagan et al., 2022). The contribution is a pre-deployment measurement-audit protocol for learning-analytics researchers and instrumentation designers: it distinguishes candidate fields reconstructible from a declared event-summary schema from generator-only information, and shows how estimates vary across independently generated populations. It does not establish that any field is a valid classroom measure or should trigger a teacher-facing alert. Privacy, transparency, agency, and human oversight remain necessary for any real deployment (Slade \& Prinsloo, 2013; Drachsler \& Greller, 2016; UNESCO, 2023).
+
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Educational basis} & \textbf{Observable candidate} & \textbf{Boundary in this experiment} \\
+\midrule
+Cognitive load and multimedia learning & Pauses, replay, navigation & Not a validated load instrument \\
+ICAP and self regulation & Manipulation, review, retry & No direct explanation or goal-monitoring measure \\
+Help seeking and feedback & Hint requests and subsequent actions & No causal feedback effect \\
+Multiple representations & Representation switching & No evidence of correct integration \\
+Simulation learning & Variable changes and manipulation & No hypothesis-quality measure \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Research questions and estimands}
+
+The revised primary question is whether features reconstructed from the present event-summary schema add predictive information beyond conventional summaries under the stated synthetic generator. We estimate performance for (a) the generator-defined scalar mastery value after the current session, (b) the next session’s constructed support-need condition, and (c) correctness on the next task. The current-session support label is no longer treated as the primary intervention outcome because its definition overlaps with same-session predictors. These are prediction/measurement estimands, not intervention-effect estimands.
+
+\section{Simulation and feature provenance}
+
+The primary analysis comprises 20 independently generated populations of 5,000 learners, using seeds 20260914–20260933, and 12 synthetic STEM concepts. For each learner, 8–12 concepts are sampled without replacement. All observations from a learner are kept in one data partition. The designated reference population uses 500 paired learner-cluster bootstrap resamples. A separate sensitivity analysis comprises 40 populations of 2,500 learners, with five replicate seeds in each of eight low/high mechanism settings.
+
+The simulator emits 16 typed event-summary rows per learner–task session in a fixed order. Values are generated summaries, not naturally occurring atomic events or an observed event sequence; inter-row intervals are rescaled to sum to task duration. The primary predictors use only learner/session identifiers, event types and values, and those intervals. Although generated records also contain latent-state annotations for auditing, feature construction excludes them; outcome labels and task order are joined separately. The seven baseline fields are time on task, page views, completion, current correctness, attempt count, session length, and clicks. Time on task and session length are identical in this simulator. The observable-rich set adds replay, animation pauses and seeks, concept revisits, simulation manipulations, variable changes, hint requests, representation switches, worked-example requests, simplification requests, and a bounded summary computed from event counts. It excludes fields not reconstructible from typed summaries, including the generator-derived productive-interaction proxy. A rich-plus-privileged diagnostic adds non-observable session summaries and is not used to attribute gains to observable event summaries.
+
+Let $\clip(x;a,b)=\min(b,\max(a,x))$, using zero and one as the bounds when omitted, and let $\sigma(x)=(1+e^{-x})^{-1}$. Learner traits are independently sampled bounded propensities. For trait $r$ with configured mean $\mu_r$ and heterogeneity setting $q$, the generator uses:
+\begin{equation}
+\begin{aligned}
+\kappa &= \max(3, 14/q),\\
+\alpha_r &= \max(.5, \mu_r\kappa), \quad \beta_r = \max(.5, (1-\mu_r)\kappa),\\
+\theta_{ir} &\sim \mathrm{Beta}(\alpha_r, \beta_r),\\
+K_{i0} &= \clip(\theta_{i,\mathrm{prior}} + \epsilon_{i0}, .03, .97), \quad \epsilon_{i0} \sim N(0, .025^2).
+\end{aligned}
+\end{equation}
+
+In the primary regime, $q=1$; lower and higher heterogeneity use $q=.65$ and $q=1.35$. The prior-knowledge trait means .48; learning rate .38; persistence .58; load sensitivity .45; hint dependence .32; exploration .42; visual responsiveness .52; disengagement risk .25; guessing .18; slipping .12; self-regulation .55; and misconception susceptibility .28. Task difficulty begins at evenly spaced values from .28 to .78, receives Gaussian perturbation, and is clipped to [.15,.90]. Abstraction and task load follow the generated difficulty:
+\begin{equation}
+\begin{aligned}
+D_j &= \clip(d_j^0 + \epsilon_j^D, .15, .90), & \epsilon_j^D &\sim N(0, .06^2),\\
+T_j &= \clip(.25 + .55D_j + \epsilon_j^T, 0, 1), & \epsilon_j^T &\sim N(0, .05^2),\\
+\ell_j &= \clip(.25 + .45D_j + .20T_j + \epsilon_j^\ell, 0, 1), & \epsilon_j^\ell &\sim N(0, .05^2).
+\end{aligned}
+\end{equation}
+
+At session $t$, cognitive load $L_{it}$ and confusion $F_{it}$ depend on task demand, current mastery, and learner traits. Hint support $U_{it}$ and productive engagement $P_{it}$ are defined as follows:
+\begin{equation}
+\begin{aligned}
+L_{it} &= \clip(\ell_j + .28c_i + .16(1-K_{it}) + \epsilon_{it}^L),\\
+F_{it} &= \clip(D_j - K_{it} + .35L_{it} + .18m_i + \epsilon_{it}^F),\\
+U_{it} &= \min(1, .10H_{it} + .08Z_{it}),\\
+P_{it} &= \clip(.35p_i + .25u_i + .16e_i + .16(1-F_{it}) + .08U_{it} + \epsilon_{it}^P).
+\end{aligned}
+\end{equation}
+
+{\sloppy Here $c_i, m_i, p_i, u_i, e_i$ denote load sensitivity, misconception susceptibility, persistence, self-regulation, and exploration; $H_{it}$ is hint count and $Z_{it}$ hint depth. The primary behavioral-noise setting is $\nu=.15$. The error standard deviations for load, confusion, and productive engagement are $.08+.05\nu$, .10, and $.10+.12\nu$, respectively. Correctness is sampled after guessing and slipping adjust the latent response probability. Mastery is then updated and carried to the learner’s next selected concept:
+\begin{equation}
+\begin{aligned}
+\pi_{it}^* &= \sigma(-.55 + 2.65K_{it} - 1.85D_j + .78\gamma_e P_{it} - .72L_{it} + .42\gamma_u U_{it}),\\
+\pi_{it} &= \pi_{it}^*(1-s_i) + (1-\pi_{it}^*)g_i, \quad Y_{it} \sim \mathrm{Bernoulli}(\clip_{[.001,.999]}(\pi_{it})),\\
+G_{it} &= (.012 + .075\gamma_e P_{it} + .025\gamma_u U_{it})a_i(1-K_{it}),\\
+K_{i,t+1} &= \clip(K_{it} + G_{it} - .035L_{it}c_i + \epsilon_{it}^K, 0, 1),\\
+\epsilon_{it}^K &\sim N(0, (.008 + .012\nu)^2).
+\end{aligned}
+\end{equation}}
+
+The primary coupling strengths are $\gamma_e=\gamma_u=1$; the sensitivity analysis varies them separately. The support-need target is a simulator-defined condition, not an externally validated diagnosis. It is positive if any of the following conditions holds; $M_{it}$ denotes a conceptual error accompanied by confusion above .55, and $B_{it}$ completion:
+\begin{equation}
+\begin{aligned}
+I_{it} = \mathbf{1}\bigl[&(K_{i,t+1} < .40 \wedge Y_{it} = 0 \wedge F_{it} > .40)\\
+&\vee (K_{i,t+1} < .40 \wedge B_{it} = 0)\\
+&\vee (L_{it} > .85 \wedge K_{i,t+1} - K_{it} < .005)\\
+&\vee (M_{it} = 1 \wedge A_{it} \geq 3)\bigr].
+\end{aligned}
+\end{equation}
+
+The reported support target is $I_{i,t+1}$, predicted from current-session features; next-task correctness is likewise shifted within learner. The continuous target is $K_{i,t+1}$. Thus the reported outcomes separate post-session state recovery from predictions of subsequent synthetic outcomes. The single mastery variable is generator-defined and is not a validated multidimensional learner-state construct.
+
+The sequence summary is reconstructed from observable event counts rather than event order:
+\begin{equation}
+C_{it}^{\mathrm{seq}} = \clip\left(\frac{R_{it} + V_{it} + S_{it} + J_{it}}{1 + \mathrm{clicks}_{it}}\right),
+\end{equation}
+where $R, V, S, J$ denote replay, revisit, representation-switch, and simulation-manipulation counts. This aggregate is not a temporal sequence model. The privileged diagnostic includes simulator-derived session summaries, including the productive-interaction proxy; the comparison therefore cannot establish that richer observable traces alone explain any diagnostic gain.
+
+The generator was designed to instantiate theory-motivated directions in a transparent synthetic world, not to calibrate educational mechanisms. The cited literature motivates candidate relationships and their direction; none of the numerical coefficients below is an empirical estimate from that literature. Values were selected by the researchers to yield a non-degenerate simulator. Only the engagement–mastery and support-effect multipliers receive direct low/high sensitivity perturbations in the reported grid.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Theory-motivated generator assumptions and parameter provenance.}
+\label{tab:assumptions}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{0.2\linewidth}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.19\linewidth}@{}}
+\toprule
+\textbf{Assumed relationship} & \textbf{Generator value} & \textbf{Rationale and provenance} & \textbf{Directly varied?} \\
+\midrule
+Productive engagement to correctness and mastery gain & +0.78 to log-odds; +0.075 to gain & Positive direction is theory-motivated (Chi \& Wylie, 2014); numerical values are researcher-selected & Yes; multiplier 0.5 and 1.5 \\
+\addlinespace
+Cognitive load to correctness and mastery change & −0.72 to log-odds; −0.035 load penalty & Negative direction is theory-motivated (Sweller, 1988); numerical values are researcher-selected & No direct coefficient sweep \\
+\addlinespace
+Hint support to correctness and mastery gain & +0.42 to log-odds; +0.025 to gain & Support is motivated by help-seeking theory (Aleven et al., 2003); numerical values are researcher-selected & Yes; multiplier 0.5 and 1.5 \\
+\addlinespace
+Constructed support-need rule & Mastery <0.40; confusion >0.40; load >0.85; change <0.005; attempts ≥3; misconception subrule requires confusion >0.55 & Explicit researcher-defined label rule; not a validated scale or literature-derived threshold & No threshold sweep \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Trait means, Beta heterogeneity, task-demand coefficients, noise levels, and target cut-points are likewise declared simulation choices, not fitted or literature-estimated parameters. Consequently, replication across seeds tests sampling variability conditional on this generator; it does not validate the educational mechanisms themselves.
+
+\section{Analysis}
+
+The prespecified primary estimator is gradient boosting, fit separately for each feature set with median imputation, 70 trees, maximum depth two, and a fixed estimator seed. For model-family sensitivity, mastery is additionally estimated with linear regression and random-forest regression; binary targets use logistic regression and random-forest classification. All families use the same learner-grouped 70/15/15 partition for each target and the same baseline versus event-reconstructed rich feature sets. The validation partition is not used for tuning. Continuous-target performance is measured by RMSE and binary-target performance by ROC-AUC. Favorable contrasts are baseline RMSE minus rich RMSE and rich AUC minus baseline AUC. Sensitivity intervals are paired learner-cluster bootstrap percentile intervals on held-out predictions, with fitted models held fixed; they quantify test-cluster uncertainty, not model-retraining uncertainty. Reference intervals use the same paired learner-cluster approach. Across-population intervals are t-based Monte Carlo intervals over the 20 generated populations and do not quantify uncertainty over real educational populations.
+
+Mechanism sensitivity uses one-factor-at-a-time low/high settings for trait heterogeneity, behavior noise, engagement–mastery coupling, and support effect, with five populations and 2,500 learners per population in each setting. This finite sensitivity grid is a robustness probe, not an exhaustive sweep of plausible educational mechanisms.
+
+\section{Results}
+
+\subsection{Reference-population performance}
+
+All entries are metric estimates with 95\% learner-cluster bootstrap intervals; the final column is the paired contrast favoring event-reconstructed rich features.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Reference-population performance for primary and diagnostic feature sets.}
+\label{tab:reference}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.17\linewidth}llll@{}}
+\toprule
+\textbf{Target} & \textbf{Baseline} & \two{\textbf{Event-}}{\textbf{reconstructed rich}} & \two{\textbf{Rich + privileged}}{\textbf{(diagnostic)}} & \two{\textbf{Rich-observable}}{\textbf{paired contrast}} \\
+\midrule
+Post-session scalar mastery RMSE & \two{0.1182}{[0.1127, 0.1235]} & \two{0.1161}{[0.1107, 0.1210]} & \two{0.1155}{[0.1102, 0.1205]} & \two{0.0021}{[0.0017, 0.0025]} \\
+\addlinespace
+Next-session constructed support-need ROC-AUC & \two{0.5502}{[0.5362, 0.5640]} & \two{0.5601}{[0.5452, 0.5751]} & \two{0.5661}{[0.5530, 0.5809]} & \two{0.0099}{[0.0020, 0.0178]} \\
+\addlinespace
+Next-task correctness ROC-AUC & \two{0.5175}{[0.5044, 0.5314]} & \two{0.5149}{[0.5014, 0.5282]} & \two{0.5168}{[0.5034, 0.5308]} & \two{−0.0026}{[−0.0082, 0.0031]} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The privileged condition is not a fair estimate of deployable event-trace value. The next-session support target is temporally separated from predictors but remains a simulator-defined label. Next-task correctness provides a more distal predictive check; its result should be interpreted on its own scale and with its uncertainty.
+
+\subsection{Model-family sensitivity}
+
+The table reports favorable-direction differences (baseline RMSE minus rich RMSE for mastery; rich AUC minus baseline AUC for binary targets) and paired 95\% learner-cluster bootstrap intervals. All models use the same 750 held-out learners in the reference population. These intervals condition on each fitted model.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Event-summary increment by estimator family in the reference population.}
+\label{tab:estimators}
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xllll@{}}
+\toprule
+\textbf{Target} & \textbf{Estimator} & \textbf{Baseline} & \two{\textbf{Event-}}{\textbf{reconstructed rich}} & \two{\textbf{Favorable}}{\textbf{difference [95\% CI]}} \\
+\midrule
+Post-session mastery RMSE & linear & 0.1184 & 0.1157 & 0.0027 [0.0020, 0.0033] \\
+Post-session mastery RMSE & random forest & 0.1231 & 0.1180 & 0.0051 [0.0042, 0.0060] \\
+Post-session mastery RMSE & gradient boosting & 0.1182 & 0.1161 & 0.0021 [0.0017, 0.0025] \\
+\addlinespace
+Next-session support AUC & logistic & 0.5547 & 0.5653 & 0.0105 [0.0027, 0.0182] \\
+Next-session support AUC & random forest & 0.5151 & 0.5368 & 0.0217 [0.0061, 0.0387] \\
+Next-session support AUC & gradient boosting & 0.5502 & 0.5601 & 0.0099 [0.0020, 0.0178] \\
+\addlinespace
+Next-task correctness AUC & logistic & 0.5249 & 0.5257 & 0.0008 [−0.0048, 0.0063] \\
+Next-task correctness AUC & random forest & 0.5089 & 0.5043 & −0.0046 [−0.0206, 0.0111] \\
+Next-task correctness AUC & gradient boosting & 0.5175 & 0.5149 & −0.0026 [−0.0082, 0.0031] \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The direction is favorable for mastery and next-session constructed support need in all three estimator families. The absolute support AUC remains low (0.515–0.565 across models). For next-task correctness, all three paired intervals include zero and point estimates are small, so the result does not support a robust incremental gain.
+
+\subsection{Replication across independently generated populations}
+
+The following contrasts are paired within each generated population. Positive values favor rich-observable features. “Favorable” counts populations with a strictly positive contrast.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Paired contrasts across independently generated populations.}
+\label{tab:replication}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Target} & \textbf{Mean contrast} & \two{\textbf{Between-}}{\textbf{population SD}} & \two{\textbf{Monte Carlo 95\%}}{\textbf{interval}} & \two{\textbf{Favorable}}{\textbf{populations}} \\
+\midrule
+Mastery & 0.0017 & 0.0003 & [0.0016, 0.0019] & 20/20 \\
+Next-task correctness & 0.0005 & 0.0043 & [−0.0015, 0.0025] & 10/20 \\
+Next-session support & 0.0088 & 0.0043 & [0.0069, 0.0108] & 20/20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The across-population interval quantifies variability across the 20 specified seeds, not uncertainty over the universe of possible educational processes. It is reported alongside the direction count to avoid treating one synthetic population as decisive.
+
+\subsection{Mechanism sensitivity}
+
+Each row reports the mean favorable-direction contrast across five populations (2,500 learners each), its between-population SD, and the number of populations with a positive contrast.
+
+\begin{table}[htbp]
+\centering\small
+\caption{One-factor-at-a-time mechanism sensitivity results.}
+\label{tab:mechanism}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Mechanism setting} & \textbf{Target} & \textbf{Mean contrast} & \textbf{SD} & \two{\textbf{Favorable}}{\textbf{populations}} \\
+\midrule
+Behavior noise: high & Mastery & 0.0020 & 0.0004 & 5/5 \\
+Behavior noise: high & Next-task correctness & 0.0004 & 0.0039 & 2/5 \\
+Behavior noise: high & Next-session support & 0.0102 & 0.0067 & 5/5 \\
+Behavior noise: low & Mastery & 0.0020 & 0.0002 & 5/5 \\
+Behavior noise: low & Next-task correctness & −0.0023 & 0.0147 & 3/5 \\
+Behavior noise: low & Next-session support & 0.0095 & 0.0040 & 5/5 \\
+\addlinespace
+Engagement–mastery: strong & Mastery & 0.0020 & 0.0003 & 5/5 \\
+Engagement–mastery: strong & Next-task correctness & 0.0031 & 0.0036 & 3/5 \\
+Engagement–mastery: strong & Next-session support & 0.0138 & 0.0125 & 5/5 \\
+Engagement–mastery: weak & Mastery & 0.0021 & 0.0005 & 5/5 \\
+Engagement–mastery: weak & Next-task correctness & −0.0016 & 0.0095 & 1/5 \\
+Engagement–mastery: weak & Next-session support & 0.0120 & 0.0054 & 5/5 \\
+\addlinespace
+Support effect: strong & Mastery & 0.0020 & 0.0002 & 5/5 \\
+Support effect: strong & Next-task correctness & −0.0005 & 0.0070 & 2/5 \\
+Support effect: strong & Next-session support & 0.0137 & 0.0070 & 5/5 \\
+Support effect: weak & Mastery & 0.0021 & 0.0005 & 5/5 \\
+Support effect: weak & Next-task correctness & −0.0006 & 0.0047 & 2/5 \\
+Support effect: weak & Next-session support & 0.0083 & 0.0098 & 4/5 \\
+\addlinespace
+Trait heterogeneity: high & Mastery & 0.0028 & 0.0003 & 5/5 \\
+Trait heterogeneity: high & Next-task correctness & 0.0004 & 0.0082 & 3/5 \\
+Trait heterogeneity: high & Next-session support & 0.0103 & 0.0077 & 4/5 \\
+Trait heterogeneity: low & Mastery & 0.0013 & 0.0002 & 5/5 \\
+Trait heterogeneity: low & Next-task correctness & 0.0027 & 0.0045 & 4/5 \\
+Trait heterogeneity: low & Next-session support & 0.0091 & 0.0077 & 4/5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Because this is a one-factor-at-a-time grid, it does not test interactions among mechanisms. Changes in target prevalence or task composition across settings are part of the simulated regime and should be read together with raw outputs.
+
+\section{Discussion}
+
+This is a pre-deployment measurement audit for learning-analytics researchers and instrumentation designers deciding which candidate fields merit collection and empirical validation—not a teacher-facing alert evaluation. Its central result is a target-distance pattern within the specified simulator: event-summary additions yield small gains for the contemporaneous generator-defined mastery scalar, a similarly small gain for a constructed next-session support label, and no stable gain for next-task correctness. This pattern is consistent with weaker incremental signal for a more distal outcome, but target distance was not experimentally isolated and should not be interpreted as a causal gradient. The support classifier’s absolute AUC remains weak even where the incremental contrast is positive.
+
+The main structural safeguards are exclusion of generator-derived engagement proxies from the primary feature set, strict learner-level grouping, a future-session support target, estimator-family sensitivity, and replication across independently generated populations. Still, positive predictive signal is conditional on relationships written into the generator. The coefficients are not empirical estimates, and seed replication does not validate the assumed learning mechanisms. The model-family analysis shows that the direction of the mastery and support contrasts is not unique to gradient boosting in this reference population, but the gains are small and this robustness check remains conditional on the same single generated population and fitted-model split.
+
+Three boundaries remain important. First, “rich-observable” means reconstructible from this simulator’s fixed typed summary rows, not demonstrated available in a deployed learning-analytics pipeline. Second, mastery is a single scalar chosen by the generator, and support need is constructed by a rule; neither is a validated educational measurement. Third, predictive discrimination is not evidence that an alert changes teacher decisions or improves learning. The intended practical implication is therefore limited to pre-deployment instrumentation and measurement choices; no teacher alert or student-level action is supported by these results.
+
+The sensitivity experiment tests whether conclusions move under several selected mechanism changes. A limited grid cannot establish general robustness. Future work should include alternative latent-state structures and event-only logging schemas, and should validate the resulting measures with ethically governed empirical data before any human-facing use.
+
+\section{Limitations and ethics}
+
+All observations are synthetic. The event file stores typed, fixed-order summaries rather than atomic event sequences, so sequence-based names do not imply that a true temporal sequence was observed. Several event values and targets are generated by related rules. The rich-all diagnostic contains privileged information. The latent state is unidimensional and generator-defined; the 12 concepts do not constitute a validated curriculum map. The mechanism sensitivity is finite and does not cover interaction effects or all reasonable parameterizations. Monte Carlo replication addresses variability over the selected independent seeds only.
+
+No learner identity or real student data are present. The manuscript does not claim deployment readiness. Any future use would require construct validation, declared prediction time, uncertainty communication, data minimization, access controls, contestability, human oversight, and evaluation of differential errors. Simulated support-need labels must not be treated as diagnoses or as evidence that an intervention is beneficial.
+
+\section{Conclusion}
+
+This simulation is best understood as a pre-deployment measurement audit. It compares conventional summaries with event-reconstructed candidate traces while separately exposing the consequences of privileged generator information, target overlap, and selected mechanism changes. Its findings are evidence about this explicit simulator, not about real learners or educational efficacy. Explicit simulation specifications, population-level contrasts, and a verifiable feature boundary make the claims auditable without overstating what a synthetic experiment can establish.
+
+\begin{references}
+\item Ainsworth, S. (2006). DeFT: A conceptual framework for considering learning with multiple representations. \textit{Learning and Instruction, 16}(3), 183–198. \url{https://doi.org/10.1016/j.learninstruc.2006.03.001}
+\item Aleven, V., Stahl, E., Schworm, S., Fischer, F., \& Wallace, R. (2003). Help seeking and help design in interactive learning environments. \textit{Review of Educational Research, 73}(3), 277–320. \url{https://doi.org/10.3102/00346543073003277}
+\item Berg, A. M., Mol, S. T., Kismihók, G., \& Sclater, N. (2016). The role of a reference synthetic data generator within the field of learning analytics. \textit{Journal of Learning Analytics, 3}(1), 107–128. \url{https://doi.org/10.18608/jla.2016.31.7}
+\item Chernikova, O., Heitzmann, N., Stadler, M., Holzberger, D., Seidel, T., \& Fischer, F. (2020). Simulation-based learning in higher education: A meta-analysis. \textit{Review of Educational Research, 90}(4), 499–541. \url{https://doi.org/10.3102/0034654320933544}
+\item Chi, M. T. H., \& Wylie, R. (2014). The ICAP framework: Linking cognitive engagement to active learning outcomes. \textit{Educational Psychologist, 49}(4), 219–243. \url{https://doi.org/10.1080/00461520.2014.965823}
+\item Corbett, A. T., \& Anderson, J. R. (1995). Knowledge tracing: Modeling the acquisition of procedural knowledge. \textit{User Modeling and User-Adapted Interaction, 4}(4), 253–278. \url{https://doi.org/10.1007/BF01099821}
+\item De Jong, T., \& van Joolingen, W. R. (1998). Scientific discovery learning with computer simulations of conceptual domains. \textit{Review of Educational Research, 68}(2), 179–201. \url{https://doi.org/10.3102/00346543068002179}
+\item Dorodchi, M., Al-Hossami, E., Benedict, A., \& Demeter, E. (2019). Using synthetic data generators to promote open science in higher education learning analytics. In \textit{2019 IEEE International Conference on Big Data} (pp. 4672–4675). IEEE. \url{https://doi.org/10.1109/BigData47090.2019.9006475}
+\item Drachsler, H., \& Greller, W. (2016). Privacy and analytics—It’s a DELICATE issue: A checklist to establish trusted learning analytics. In \textit{Proceedings of the Sixth International Learning Analytics \& Knowledge Conference} (pp. 89–98). Association for Computing Machinery. \url{https://doi.org/10.1145/2883851.2883893}
+\item Flanagan, B., Majumdar, R., \& Ogata, H. (2022). Fine grain synthetic educational data: Challenges and limitations of collaborative learning analytics. \textit{IEEE Access, 10}, 26230–26241. \url{https://doi.org/10.1109/ACCESS.2022.3156073}
+\item Gašević, D., Dawson, S., \& Siemens, G. (2015). Let’s not forget: Learning analytics are about learning. \textit{TechTrends, 59}(1), 64–71. \url{https://doi.org/10.1007/s11528-014-0822-x}
+\item Hershkovitz, A., Knight, S., Jovanović, J., Dawson, S., \& Gašević, D. (2017). Research with simulated data. \textit{Journal of Learning Analytics, 4}(1), 1–2. \url{https://doi.org/10.18608/jla.2017.41.1}
+\item Macfadyen, L. P., \& Dawson, S. (2010). Mining LMS data to develop an “early warning system” for educators: A proof of concept. \textit{Computers \& Education, 54}(2), 588–599. \url{https://doi.org/10.1016/j.compedu.2009.09.008}
+\item Mayer, R. E., \& Moreno, R. (2003). Nine ways to reduce cognitive load in multimedia learning. \textit{Educational Psychologist, 38}(1), 43–52. \url{https://doi.org/10.1207/S15326985EP3801_6}
+\item Misiejuk, K., López-Pernas, S., Kaliisa, R., \& Saqr, M. (2025). Mapping the landscape of generative artificial intelligence in learning analytics: A systematic literature review. \textit{Journal of Learning Analytics, 12}(1), 12–31. \url{https://doi.org/10.18608/jla.2025.8591}
+\item Morris, T. P., White, I. R., \& Crowther, M. J. (2019). Using simulation studies to evaluate statistical methods. \textit{Statistics in Medicine, 38}(11), 2074–2102. \url{https://doi.org/10.1002/sim.8086}
+\item Pelánek, R., Řihák, J., \& Papoušek, J. (2016). Impact of data collection on interpretation and evaluation of student models. In \textit{Proceedings of the Sixth International Learning Analytics \& Knowledge Conference} (pp. 40–47). Association for Computing Machinery. \url{https://doi.org/10.1145/2883851.2883868}
+\item Piech, C., Bassen, J., Huang, J., Ganguli, S., Sahami, M., Guibas, L., \& Sohl-Dickstein, J. (2015). Deep knowledge tracing. In \textit{Advances in Neural Information Processing Systems} (Vol. 28). \url{https://papers.nips.cc/paper/2015/hash/bac9162b47c56fc8a4d2a519803d51b3-Abstract.html}
+\item Shute, V. J. (2008). Focus on formative feedback. \textit{Review of Educational Research, 78}(1), 153–189. \url{https://doi.org/10.3102/0034654307313795}
+\item Slade, S., \& Prinsloo, P. (2013). Learning analytics: Ethical issues and dilemmas. \textit{American Behavioral Scientist, 57}(10), 1510–1529. \url{https://doi.org/10.1177/0002764213479366}
+\item Sweller, J. (1988). Cognitive load during problem solving: Effects on learning. \textit{Cognitive Science, 12}(2), 257–285. \url{https://doi.org/10.1207/s15516709cog1202_4}
+\item UNESCO. (2023). \textit{Guidance for generative AI in education and research}. \url{https://doi.org/10.54675/EWZM9535}
+\item Zimmerman, B. J. (2002). Becoming a self-regulated learner: An overview. \textit{Theory Into Practice, 41}(2), 64–70. \url{https://doi.org/10.1207/s15430421tip4102_2}
+\end{references}
+
+\section*{Statement on AI Use}
+
+AI tools were used to assist with coding and debugging, translation, and language editing.
+
+\end{document}

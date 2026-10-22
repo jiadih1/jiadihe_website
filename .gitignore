@@ -1,0 +1,16 @@
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+.bundle/
+vendor/
+# LaTeX build products
+paper-src/**/*.aux
+paper-src/**/*.log
+paper-src/**/*.out
+paper-src/**/*.fls
+paper-src/**/*.fdb_latexmk
+paper-src/**/*.xdv
+paper-src/**/*.synctex.gz
+paper-src/**/main.pdf
+.DS_Store
