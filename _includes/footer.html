@@ -1,6 +1,6 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <span>© {{ site.time | date: "%Y" }} Jiadi He</span>
-    <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+    <span class="footer-links"><a href="mailto:{{ site.email }}">{{ site.email }}</a>{% if site.linkedin %}<a href="{{ site.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>{% endif %}</span>
   </div>
 </footer>

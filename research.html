@@ -11,7 +11,8 @@ description: Research and writing on institutions, opportunity, decision-making,
   <nav class="theme-index" aria-label="Themes">
     <ol>
       {% for t in site.data.themes %}
-      <li><a href="#theme-{{ t.id }}"><span class="ti-num">{{ t.id }}</span><span class="ti-title">{{ t.title }}</span></a></li>
+      {% assign n = site.research | where: "theme", t.id | size %}
+      <li><a href="#theme-{{ t.id }}" data-theme="{{ t.id }}"><span class="ti-num">{{ t.id }}</span><span class="ti-title">{{ t.title }}</span><span class="ti-count">{{ n }}</span></a></li>
       {% endfor %}
     </ol>
   </nav>

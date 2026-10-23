@@ -11,7 +11,7 @@
 # image/kicker/caption and delete `placeholder: true`.
 - kicker: Talk
   caption: Photo and caption to come
-  size: l
+  size: m
   placeholder: true
 - kicker: Program
   caption: Photo and caption to come
@@ -23,13 +23,13 @@
   placeholder: true
 - kicker: Collaboration
   caption: Photo and caption to come
-  size: l
+  size: m
   placeholder: true
 - kicker: Public engagement
   caption: Photo and caption to come
-  size: w
+  size: m
   placeholder: true
 - kicker: International work
   caption: Photo and caption to come
-  size: w
+  size: m
   placeholder: true

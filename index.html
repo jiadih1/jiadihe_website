@@ -2,79 +2,88 @@
 layout: default
 slug_class: about
 ---
-<section class="wrap about-opening">
-  <p class="kicker">{{ site.tagline }}</p>
-  <p class="opening">My work sits across <mark class="hl">education, policy, business, and public institutions</mark>, shaped by both academic training and <span class="nowrap">hands-on</span> institution building.</p>
-</section>
+{% assign portrait = site.static_files | where_exp: "f", "f.path contains '/assets/img/portrait.'" | first %}
+<section class="wrap about-hero{% if portrait %} has-photo{% endif %}">
+  {% if portrait %}
+  <img class="portrait" src="{{ portrait.path | relative_url }}" alt="Jiadi He" width="600" height="600">
+  {% endif %}
+  <div class="about-text">
+    <p class="opening">My work sits across <mark class="hl">education, policy, business, and public institutions</mark>, shaped by both academic training and <span class="nowrap">hands-on</span> institution building.</p>
 
-<section class="wrap split" aria-labelledby="edu-bg-h">
-  <h2 id="edu-bg-h" class="split-label">Education</h2>
-  <div class="split-body prose">
-    <p>I studied Government, Statistics, and Women’s and Gender Studies at <strong>Georgetown University</strong> before completing my <mark class="hl">M.Ed. in Education Policy and Analysis</mark> at the <strong>Harvard Graduate School of Education</strong>, with additional study at <strong>Harvard Kennedy School</strong> and <strong>MIT</strong>.</p>
+    <div class="about-facts">
+      <div class="fact">
+        <h2 class="fact-label">Education</h2>
+        <p>I studied Government, Statistics, and Women’s and Gender Studies at <strong>Georgetown University</strong> before completing my <mark class="hl">M.Ed. in Education Policy and Analysis</mark> at the <strong>Harvard Graduate School of Education</strong>, with additional study at <strong>Harvard Kennedy School</strong> and <strong>MIT</strong>.</p>
+        <p class="contact-line" id="contact"><span class="fact-label">Contact</span> <a href="mailto:{{ site.email }}">{{ site.email }}</a>{% if site.linkedin %}<span class="sep" aria-hidden="true">·</span><a href="{{ site.linkedin }}" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>{% endif %}</p>
+      </div>
+      <div class="fact">
+        <h2 class="fact-label">Approach</h2>
+        <p>Across research, institution building, entrepreneurship, and public engagement, education has remained a consistent thread, from policy and organizational work to learning, technology, and opportunity.</p>
+        <p>I am drawn to work that <mark class="hl">connects research with practice</mark> and leads to something tangible, from a policy idea to a program, partnership, or new initiative.</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<section class="wrap split" aria-labelledby="tl-h">
-  <h2 id="tl-h" class="split-label">Timeline</h2>
-  <div class="split-body">
-    <p class="tl-hint">Education, roles, projects, and writing by year. Paper titles open the paper.</p>
-    <p class="tl-legend" aria-hidden="true"><span><i class="lg-edu"></i>Education</span><span><i class="lg-role"></i>Role</span><span><i class="lg-paper"></i>Paper</span>{% assign dated_projects = 0 %}{% for w in site.data.world %}{% if w.year and w.placeholder != true %}{% assign dated_projects = dated_projects | plus: 1 %}{% endif %}{% endfor %}{% if dated_projects > 0 %}<span><i class="lg-project"></i>Project</span>{% endif %}</p>
-    <ol class="timeline">
-      {%- comment -%}
-        Rows come from _data/timeline.yml. In the World entries that have a `year`
-        (and are not placeholders) are added at the end of that year automatically.
-      {%- endcomment -%}
-      {% assign cur_year = nil %}
-      {% for row in site.data.timeline %}
-        {% if row.year or row.label %}
-          {% if cur_year %}{% include timeline-projects.html year=cur_year %}{% endif %}
-          {% assign cur_year = row.year %}
-      <li class="tl-year{% if row.label %} is-label{% endif %}"><span>{{ row.year | default: row.label }}</span></li>
-        {% elsif row.milestone %}
-      <li class="tl-milestone">
-        <div class="tl-card">
-          <span class="tl-kind">Education</span>
-          <p class="tl-inst">{{ row.milestone }}</p>
-          {% if row.detail %}<p class="tl-detail">{{ row.detail }}</p>{% endif %}
-        </div>
-      </li>
-        {% elsif row.role %}
-      <li class="tl-role">
-        <span class="tl-kind">Role</span>
-        <span class="tl-title">{{ row.role }}</span>
-        {% if row.org %}<span class="tl-sub">{{ row.org }}</span>{% endif %}
-      </li>
-        {% elsif row.paper %}
-          {% assign p = site.research | where: "slug", row.paper | first %}
-          {% if p %}
-          {% assign th = site.data.themes | where: "id", p.theme | first %}
-      <li class="tl-paper">
-        <a href="{{ p.url | relative_url }}">
-          <span class="tl-kind">{% if p.external %}Project{% else %}Paper{% endif %} · {{ th.title }}</span>
-          <span class="tl-title">{{ p.title }}</span>
-          {% if p.credit %}<span class="tl-sub">{{ p.credit }}</span>{% endif %}
-        </a>
-      </li>
-          {% endif %}
+<section class="wrap tl-section" aria-labelledby="tl-h">
+  <header class="tl-head">
+    <h2 id="tl-h" class="fact-label">Timeline <span class="tl-order">Newest first</span></h2>
+  </header>
+  <div class="tl-cols" aria-hidden="true"><span><i class="mk mk-role"></i>Education &amp; Roles</span><span class="tl-col-b"><i class="mk mk-paper"></i>Papers &amp; Projects</span></div>
+
+  {%- comment -%}
+    _data/timeline.yml: one entry per year, newest first, with separate
+    education/roles and papers lanes. Dated In the World photos join the papers lane.
+  {%- endcomment -%}
+  <ol class="timeline">
+    {% for g in site.data.timeline %}
+    {% assign label = g.year | default: g.label %}
+    <li class="tl-group{% if g.label %} is-label{% endif %}">
+      <span class="tl-year">{{ label }}</span>
+
+      <div class="tl-lane tl-lane-a{% unless g.education or g.roles %} is-empty{% endunless %}">
+        {% if g.education or g.roles %}
+        <h3 class="tl-lane-label">Education &amp; Roles</h3>
+        <ul>
+          {% for e in g.education %}
+          <li class="tl-item tl-milestone">
+            <span class="tl-inst">{{ e.school }}</span>
+            {% if e.detail %}<span class="tl-detail">{{ e.detail }}</span>{% endif %}
+          </li>
+          {% endfor %}
+          {% for r in g.roles %}
+          <li class="tl-item tl-role">
+            <i class="mk mk-role" aria-hidden="true"></i>
+            <span class="tl-text"><span class="tl-title">{{ r.role }}</span>{% if r.org %}<span class="tl-org">{{ r.org }}</span>{% endif %}</span>
+          </li>
+          {% endfor %}
+        </ul>
         {% endif %}
-      {% endfor %}
-      {% if cur_year %}{% include timeline-projects.html year=cur_year %}{% endif %}
-    </ol>
-  </div>
-</section>
+      </div>
 
-<section class="wrap split" aria-labelledby="approach-h">
-  <h2 id="approach-h" class="split-label">Approach</h2>
-  <div class="split-body prose">
-    <p>Across research, institution building, entrepreneurship, and public engagement, education has remained a consistent thread, from policy and organizational work to learning, technology, and opportunity.</p>
-    <p>I am drawn to work that <mark class="hl">connects research with practice</mark> and leads to something tangible, from a policy idea to a program, partnership, or new initiative.</p>
-  </div>
-</section>
-
-<section class="wrap split" id="contact" aria-labelledby="contact-h">
-  <h2 id="contact-h" class="split-label">Contact</h2>
-  <div class="split-body about-contact">
-    <p class="contact-areas">Education · Research · Partnerships</p>
-    <a class="contact-email" href="mailto:{{ site.email }}">{{ site.email }}</a>
-  </div>
+      {% capture projects %}{% if g.year %}{% include timeline-projects.html year=g.year %}{% endif %}{% endcapture %}
+      {% assign projects = projects | strip %}
+      {% assign has_b = false %}{% if g.papers or projects != "" %}{% assign has_b = true %}{% endif %}
+      <div class="tl-lane tl-lane-b{% unless has_b %} is-empty{% endunless %}">
+        {% if g.papers or projects != "" %}
+        <h3 class="tl-lane-label">Papers &amp; Projects</h3>
+        <ul>
+          {% for slug in g.papers %}
+          {% assign p = site.research | where: "slug", slug | first %}
+          {% if p %}
+          <li class="tl-item tl-paper">
+            <a href="{{ p.url | relative_url }}">
+              <i class="mk {% if p.external %}mk-project{% else %}mk-paper{% endif %}" aria-hidden="true"></i>
+              <span class="tl-text"><span class="tl-title">{{ p.title }}</span>{% if p.credit %}<span class="tl-org">{{ p.credit }}</span>{% endif %}</span>
+            </a>
+          </li>
+          {% endif %}
+          {% endfor %}
+          {{ projects }}
+        </ul>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
 </section>

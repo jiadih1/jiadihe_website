@@ -1,8 +1,8 @@
 # Jiadi He — personal website
 
 A small Jekyll site with no theme: four pages behind a top navigation
-(About · Ideas & Research · In the World · Contact), plus one page per paper.
-"Contact" jumps to the contact block at the end of About; there is no separate page.
+(About · Ideas & Research · In the World), plus one page per paper. Her contact
+details sit in the Contact block on the About page; there is no Contact page or menu item.
 Each paper is typeset as an academic preprint (LaTeX), and its page shows the
 PDF inline with an "Open PDF" button.
 
@@ -11,14 +11,15 @@ PDF inline with an "Open PDF" button.
 | What | File |
 | --- | --- |
 | About page text | `index.html` |
-| About timeline: years, education steps, roles, papers (dated photos join automatically) | `_data/timeline.yml` |
+| About timeline, newest first: per year an Education & Roles lane and a Papers lane (dated photos join automatically) | `_data/timeline.yml` |
+| Portrait on About | `assets/img/portrait.jpg` (appears automatically when the file exists) |
+| Email and LinkedIn | `_config.yml` (`email:`, `linkedin:`) |
 | The six research themes | `_data/themes.yml` |
 | One research entry (title, tags, description, context, PDF) | `_research/<slug>.md` |
 | Paper PDFs served by the site | `papers/<slug>.pdf` |
 | LaTeX source for each paper | `paper-src/<slug>/main.tex` |
 | Shared paper style (fonts, title block, references) | `paper-src/_shared/preprint.sty` |
 | In the World photos and captions | `_data/world.yml` + `assets/img/world/` |
-| Contact email | `_config.yml` (`email:`) |
 | Colours, fonts, layout | `assets/css/main.css` |
 
 ### Add or edit a research entry

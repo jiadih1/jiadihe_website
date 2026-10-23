@@ -1,63 +1,65 @@
-# About-page timeline, top to bottom (oldest first).
-# Row kinds:
-#   - year: 2022                       a year marker on the axis
-#   - label: Ongoing                   a marker with text instead of a year
-#   - milestone: Institution           an education step
-#     detail: ...                      (one line under it)
-#   - role: Admissions Ambassador      a role (org: optional second line)
-#     org: Harvard Graduate School of Education
-#   - paper: <slug>                    links to _research/<slug>.md (title and theme come from there)
-# In the World photos that have a `year:` in _data/world.yml are added at the
-# end of that year automatically.
+# About-page timeline, NEWEST FIRST. One entry per year (or a label such as
+# "Ongoing"), each with two separate lanes:
+#   education / roles  -> left column  ("Education & Roles")
+#   papers             -> right column ("Papers & Projects"); slugs of _research/<slug>.md
+# In the World photos that have a `year:` in _data/world.yml are added to the
+# right column of that year automatically.
 #
 # Paper dates come from her own files: the date typed on the document where there
 # is one, otherwise the PDF/Word creation date. Everything marked CONFIRM is a
 # best guess that still needs her check.
 
-- milestone: Georgetown University
-  detail: Government, Statistics, and Women’s and Gender Studies
-
-- year: 2021
-- paper: law-agreements-international-relations      # Dec 2021 (PDF date)
-- paper: political-economy-inequality-america        # Dec 2021 (PDF date)
-
-- year: 2022
-- paper: race-and-disability                         # 28 Apr 2022 (on document)
-- paper: language-and-identity                       # 29 Apr 2022 (on document)
-- paper: disability-justice-is-love                  # May 2022 (file date)
-- paper: construction-ethnicity-race-nation          # 13 May 2022 (on document)
-- paper: data-collection-accountability              # 1 Oct 2022 (on document)
-- paper: post-katrina-charter-schools                # Nov 2022 (Word file date)
-
-- year: 2023
-- paper: aristotle-best-regime                       # May 2023 (PDF date)
-
-- milestone: Harvard Graduate School of Education
-  detail: M.Ed. in Education Policy and Analysis, with additional study at Harvard Kennedy School and MIT
-
-- role: Admissions Ambassador                        # CONFIRM: assumed during the M.Ed. year
-  org: Harvard Graduate School of Education
-- role: Committee Member                             # CONFIRM: assumed during her time at Harvard
-  org: Harvard Politics and Economics Association
-- role: Georgetown University Admissions Interviewer # CONFIRM: assumed alumni interviewer, from 2023
-- paper: rethinking-the-gaokao                       # Nov 2023 (PDF date)
-- paper: wearable-health-privacy                     # Dec 2023 (Word file date)
-- paper: students-emotional-behavioral-disorders     # 15 Dec 2023 (on document)
-
-- year: 2024
-- paper: ai-reskilling-upskilling-initiative         # 15 Apr 2024 (on document)
-- paper: writing-skills-chinese-students             # May 2024 (Word file date)
-- role: Harvard College Admissions Interviewer       # CONFIRM: assumed alumni interviewer, after the M.Ed.
-- role: Research Collaborator                        # CONFIRM: placed with the Sep 2024 Georgetown paper
-  org: Georgetown University
-- paper: political-institutions-economic-outcomes    # CONFIRM: PDF dated Sep 2024, but the cover says Georgetown
-- role: Executive Director                           # CONFIRM: year unknown
-  org: National Center for Sustainable Development
-- role: Founder & Founding Executive                 # CONFIRM: year unknown
-  org: Education Ventures
+- label: Ongoing
+  roles:
+    - role: Public Speaker                               # CONFIRM: no single year
 
 - year: 2026
-- paper: event-summary-traces-measurement            # Sep 2026 (file date; cites 2025 work)
+  papers:
+    - event-summary-traces-measurement                   # Sep 2026 (file date; cites 2025 work)
 
-- label: Ongoing
-- role: Public Speaker                               # CONFIRM: no single year
+- year: 2024
+  roles:
+    - role: Founder & Founding Executive                 # CONFIRM: year unknown
+      org: Education Ventures
+    - role: Executive Director                           # CONFIRM: year unknown
+      org: National Center for Sustainable Development
+    - role: Research Collaborator                        # CONFIRM: placed with the Sep 2024 Georgetown paper
+      org: Georgetown University
+    - role: Harvard College Admissions Interviewer       # CONFIRM: assumed alumni interviewer, after the M.Ed.
+  papers:
+    - political-institutions-economic-outcomes           # CONFIRM: PDF dated Sep 2024, but the cover says Georgetown
+    - writing-skills-chinese-students                    # May 2024 (Word file date)
+    - ai-reskilling-upskilling-initiative                # 15 Apr 2024 (on document)
+
+- year: 2023
+  education:
+    - school: Harvard Graduate School of Education
+      detail: M.Ed. in Education Policy and Analysis, with additional study at Harvard Kennedy School and MIT
+  roles:
+    - role: Georgetown University Admissions Interviewer # CONFIRM: assumed alumni interviewer, from 2023
+    - role: Committee Member                             # CONFIRM: assumed during her time at Harvard
+      org: Harvard Politics and Economics Association
+    - role: Admissions Ambassador                        # CONFIRM: assumed during the M.Ed. year
+      org: Harvard Graduate School of Education
+  papers:
+    - students-emotional-behavioral-disorders            # 15 Dec 2023 (on document)
+    - wearable-health-privacy                            # Dec 2023 (Word file date)
+    - rethinking-the-gaokao                              # Nov 2023 (PDF date)
+    - aristotle-best-regime                              # May 2023 (PDF date)
+
+- year: 2022
+  papers:
+    - post-katrina-charter-schools                       # Nov 2022 (Word file date)
+    - data-collection-accountability                     # 1 Oct 2022 (on document)
+    - construction-ethnicity-race-nation                 # 13 May 2022 (on document)
+    - disability-justice-is-love                         # May 2022 (file date)
+    - language-and-identity                              # 29 Apr 2022 (on document)
+    - race-and-disability                                # 28 Apr 2022 (on document)
+
+- year: 2021
+  education:
+    - school: Georgetown University
+      detail: Government, Statistics, and Women’s and Gender Studies
+  papers:
+    - political-economy-inequality-america               # Dec 2021 (PDF date)
+    - law-agreements-international-relations             # Dec 2021 (PDF date)

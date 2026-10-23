@@ -14,11 +14,31 @@
   if (!window.pdfjsLib) { fallback(); return; }
   pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-  pdfjsLib.getDocument(url).promise.then(function (pdf) {
-    status.textContent = pdf.numPages + (pdf.numPages === 1 ? " page" : " pages");
+  /* Character maps and standard fonts let PDF.js draw the Chinese text (e.g. the
+     Gaokao paper); cdnjs does not host them, jsDelivr does for this version. */
+  var assets = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/";
+  pdfjsLib.getDocument({ url: url, cMapUrl: assets + "cmaps/", cMapPacked: true, standardFontDataUrl: assets + "standard_fonts/" }).promise.then(function (pdf) {
+    var total = pdf.numPages;
+    status.textContent = total === 1 ? "1 page" : "Page 1 of " + total;
+    /* Pages scroll inside the framed reader, so it is the observer's root. */
     var io = "IntersectionObserver" in window ? new IntersectionObserver(function (entries) {
       entries.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); draw(e.target); } });
-    }, { rootMargin: "800px 0px" }) : null;
+    }, { root: pagesEl, rootMargin: "1200px 0px" }) : null;
+
+    /* "Page n of N": the page whose top is nearest the top of the frame. */
+    var ticking = false;
+    pagesEl.addEventListener("scroll", function () {
+      if (ticking || total === 1) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        var top = pagesEl.getBoundingClientRect().top, cur = 1;
+        Array.prototype.forEach.call(pagesEl.children, function (h) {
+          if (h.getBoundingClientRect().top - top < pagesEl.clientHeight * 0.4) cur = +h.getAttribute("data-page") || cur;
+        });
+        status.textContent = "Page " + cur + " of " + total;
+      });
+    }, { passive: true });
 
     function draw(holder) {
       var n = +holder.getAttribute("data-page");

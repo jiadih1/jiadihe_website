@@ -1,10 +1,11 @@
 # Site settings for Jiadi He's personal website (Jekyll, no theme).
 title: Jiadi He
-tagline: Education · Policy · Institutions · Research · Technology · Public Engagement
 description: >-
   Jiadi He works across education, policy, business, and public institutions,
   shaped by academic training and hands-on institution building.
 email: jh2288@georgetown.edu
+linkedin: https://www.linkedin.com/in/jiadi-he-3656301a2/
+# Portrait on About: put assets/img/portrait.jpg (or .png/.webp) in place and it appears.
 # url / baseurl are deliberately not set: GitHub Pages fills them in from the
 # repository name (<user>.github.io -> "/", any other repo -> "/<repo>").
 # Set them only when using a custom domain.

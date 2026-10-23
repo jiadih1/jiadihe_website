@@ -56,5 +56,5 @@ slug_class: paper
 
 {% if page.pdf %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
-<script src="{{ '/assets/js/reader.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/reader.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 {% endif %}

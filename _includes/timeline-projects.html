@@ -1,16 +1,13 @@
-{%- comment -%} In the World entries for one year, as timeline rows (placeholders are skipped). {%- endcomment -%}
+{%- comment -%} In the World entries for one year, as timeline items (placeholders are skipped). {%- endcomment -%}
 {% for w in site.data.world %}
   {% if w.placeholder or w.year == nil %}{% continue %}{% endif %}
   {% assign wy = w.year | append: "" %}
   {% assign iy = include.year | append: "" %}
   {% if wy == iy %}
-<li class="tl-project">
+<li class="tl-item tl-project">
   <a href="{{ '/in-the-world/' | relative_url }}{% if w.id %}#{{ w.id }}{% endif %}">
-    {% if w.image %}<img class="tl-thumb" src="{{ w.image | relative_url }}" alt="" loading="lazy">{% endif %}
-    <span class="tl-project-text">
-      <span class="tl-kind">{{ w.kicker | default: "Project" }}</span>
-      <span class="tl-title">{{ w.caption }}</span>
-    </span>
+    {% if w.image %}<img class="tl-thumb" src="{{ w.image | relative_url }}" alt="" loading="lazy">{% else %}<i class="mk mk-project" aria-hidden="true"></i>{% endif %}
+    <span class="tl-text"><span class="tl-title">{{ w.caption }}</span>{% if w.kicker %} <span class="tl-org">{{ w.kicker }}</span>{% endif %}</span>
   </a>
 </li>
   {% endif %}
