@@ -5,7 +5,7 @@ slug_class: about
 {% assign portrait = site.static_files | where_exp: "f", "f.path contains '/assets/img/portrait.'" | first %}
 <section class="wrap about-hero{% if portrait %} has-photo{% endif %}">
   {% if portrait %}
-  <img class="portrait" src="{{ portrait.path | relative_url }}" alt="Jiadi He" width="600" height="600">
+  <span class="portrait"><img src="{{ portrait.path | relative_url }}" alt="Jiadi He" width="800" height="800"></span>
   {% endif %}
   <div class="about-text">
     <p class="opening">My work sits across <mark class="hl">education, policy, business, and public institutions</mark>, shaped by both academic training and <span class="nowrap">hands-on</span> institution building.</p>
