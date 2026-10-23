@@ -123,15 +123,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
    Approach side by side, then the timeline. */
 .about-hero { padding-top: clamp(30px, 4.5vw, 60px); padding-bottom: clamp(22px, 3vw, 34px); }
 .about-hero.has-photo {
-  display: grid; grid-template-columns: minmax(0, 1fr) clamp(170px, 19vw, 250px);
-  column-gap: clamp(24px, 4.5vw, 64px); align-items: start;
+  display: grid; grid-template-columns: clamp(180px, 20vw, 264px) minmax(0, 1fr);
+  column-gap: clamp(26px, 4.5vw, 60px); align-items: start;
 }
-.about-hero.has-photo .about-text { grid-column: 1; grid-row: 1; }
+.about-hero.has-photo .about-text { grid-column: 2; grid-row: 1; }
 .portrait {
-  grid-column: 2; grid-row: 1; display: block; overflow: hidden; aspect-ratio: 4 / 5;
+  grid-column: 1; grid-row: 1; display: block; overflow: hidden; aspect-ratio: 4 / 5;
   border-radius: 6px; box-shadow: var(--shadow); background: var(--paper-3);
 }
-.portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+.portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }
 .opening {
   font-size: clamp(1.32rem, 0.98rem + 1.25vw, 2rem);
   line-height: 1.25; letter-spacing: -0.008em; font-weight: 380;
