@@ -381,8 +381,7 @@ mark.hl {
 .shot-caption { font-size: 1rem; line-height: 1.4; color: var(--ink-2); }
 .is-placeholder .shot-caption { font-style: italic; color: var(--muted); }
 
-/* ---------- contact ---------- */
-.contact { padding-top: clamp(64px, 12vw, 168px); min-height: 52vh; }
+/* ---------- contact (About page) ---------- */
 .contact-areas { margin-top: clamp(24px, 3vw, 36px); font-size: 0.8rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
 .contact-email {
   display: inline-block; margin-top: 16px; font-size: clamp(1.5rem, 1rem + 2.6vw, 2.9rem); line-height: 1.2;

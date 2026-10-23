@@ -2,6 +2,7 @@
 
 A small Jekyll site with no theme: four pages behind a top navigation
 (About · Ideas & Research · In the World · Contact), plus one page per paper.
+"Contact" jumps to the contact block at the end of About; there is no separate page.
 Each paper is typeset as an academic preprint (LaTeX), and its page shows the
 PDF inline with an "Open PDF" button.
 
