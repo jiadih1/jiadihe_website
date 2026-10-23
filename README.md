@@ -12,7 +12,7 @@ PDF inline with an "Open PDF" button.
 | --- | --- |
 | About page text | `index.html` |
 | About timeline, newest first: per year an Education & Roles lane and a Papers lane (dated photos join automatically) | `_data/timeline.yml` |
-| Portrait on About | `assets/img/portrait.jpg` (appears automatically when the file exists) |
+| Portrait on About | `assets/img/portrait.jpg` (4:5) and optional `portrait-face.jpg` (square, used in the phone circle); both appear automatically |
 | Email and LinkedIn | `_config.yml` (`email:`, `linkedin:`) |
 | The six research themes | `_data/themes.yml` |
 | One research entry (title, tags, description, context, PDF) | `_research/<slug>.md` |

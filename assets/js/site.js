@@ -61,6 +61,7 @@
    browser's jump and push the target down, so jump again once they are ready. */
 (function () {
   if (!location.hash || !document.fonts || !document.fonts.ready) return;
+  if (/^#theme-\d+$/.test(location.hash) && document.querySelector(".theme-index")) return; /* tabs handle these */
   var target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
   if (!target) return;
   document.fonts.ready.then(function () {

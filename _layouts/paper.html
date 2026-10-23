@@ -12,13 +12,13 @@ slug_class: paper
   <header class="paper-head">
     <p class="category"><span>{{ theme.id }}</span>{{ theme.title }}</p>
     <h1 class="paper-title">{{ page.title }}</h1>
-    <p class="tags">{{ page.tags | join: " · " }}</p>
+    <p class="chips">{% for tag in page.tags %}<span class="chip">{{ tag }}</span>{% endfor %}</p>
     <p class="paper-desc">{{ page.description }}</p>
     {% if page.authors or page.credit or page.context %}
     <dl class="paper-meta">
       {% if page.authors %}<div><dt>Authors</dt><dd>{{ page.authors | join: ", " }}</dd></div>{% endif %}
       {% if page.credit %}<div><dt>Format</dt><dd>{{ page.credit }}</dd></div>{% endif %}
-      {% if page.context %}<div><dt>Academic context</dt><dd>{{ page.context.name }} · {{ page.context.institution }}</dd></div>{% endif %}
+      {% if page.context %}<div><dt>Academic context</dt><dd>{{ page.context.name }}, {{ page.context.institution }}</dd></div>{% endif %}
     </dl>
     {% endif %}
     <div class="actions">
