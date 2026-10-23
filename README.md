@@ -10,9 +10,7 @@ PDF inline with an "Open PDF" button.
 | What | File |
 | --- | --- |
 | About page text | `index.html` |
-| About timeline (years, education steps, which papers sit where) | `_data/timeline.yml` |
-| Selected Roles list | `_data/roles.yml` |
-| "Across Education" six modules | `_data/education_modules.yml` |
+| About timeline: years, education steps, roles, papers (dated photos join automatically) | `_data/timeline.yml` |
 | The six research themes | `_data/themes.yml` |
 | One research entry (title, tags, description, context, PDF) | `_research/<slug>.md` |
 | Paper PDFs served by the site | `papers/<slug>.pdf` |
@@ -57,8 +55,9 @@ The script compiles `paper-src/<slug>/main.tex` and copies the result to `papers
 
 Put images in `assets/img/world/`, then edit `_data/world.yml`. Each entry takes
 `image`, `kicker`, `caption`, optional `alt`, and `size` (`l` wide, `m` narrow,
-`w` half). The six entries there now are placeholders; delete `placeholder: true`
-when you replace one.
+`w` half). Add `year:` (and a short `id:`) and the photo also appears on the
+About timeline at the end of that year. The six entries there now are
+placeholders; delete `placeholder: true` when you replace one.
 
 ## Run locally
 

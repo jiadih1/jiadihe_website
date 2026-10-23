@@ -4,28 +4,45 @@ slug_class: about
 ---
 <section class="wrap about-opening">
   <p class="kicker">{{ site.tagline }}</p>
-  <p class="opening">My work sits across education, policy, business, and public institutions, shaped by both academic training and <span class="nowrap">hands-on</span> institution building.</p>
+  <p class="opening">My work sits across <mark class="hl">education, policy, business, and public institutions</mark>, shaped by both academic training and <span class="nowrap">hands-on</span> institution building.</p>
 </section>
 
 <section class="wrap split" aria-labelledby="edu-bg-h">
   <h2 id="edu-bg-h" class="split-label">Education</h2>
   <div class="split-body prose">
-    <p>I studied Government, Statistics, and Women’s and Gender Studies at Georgetown University before completing my M.Ed. in Education Policy and Analysis at the Harvard Graduate School of Education, with additional study at Harvard Kennedy School and MIT.</p>
+    <p>I studied Government, Statistics, and Women’s and Gender Studies at <strong>Georgetown University</strong> before completing my <mark class="hl">M.Ed. in Education Policy and Analysis</mark> at the <strong>Harvard Graduate School of Education</strong>, with additional study at <strong>Harvard Kennedy School</strong> and <strong>MIT</strong>.</p>
   </div>
 </section>
 
 <section class="wrap split" aria-labelledby="tl-h">
   <h2 id="tl-h" class="split-label">Timeline</h2>
   <div class="split-body">
-    <p class="tl-hint">Research and writing by year. Each title opens the paper.</p>
+    <p class="tl-hint">Education, roles, projects, and writing by year. Paper titles open the paper.</p>
+    <p class="tl-legend" aria-hidden="true"><span><i class="lg-edu"></i>Education</span><span><i class="lg-role"></i>Role</span><span><i class="lg-paper"></i>Paper</span>{% assign dated_projects = 0 %}{% for w in site.data.world %}{% if w.year and w.placeholder != true %}{% assign dated_projects = dated_projects | plus: 1 %}{% endif %}{% endfor %}{% if dated_projects > 0 %}<span><i class="lg-project"></i>Project</span>{% endif %}</p>
     <ol class="timeline">
+      {%- comment -%}
+        Rows come from _data/timeline.yml. In the World entries that have a `year`
+        (and are not placeholders) are added at the end of that year automatically.
+      {%- endcomment -%}
+      {% assign cur_year = nil %}
       {% for row in site.data.timeline %}
-        {% if row.year %}
-      <li class="tl-year"><span>{{ row.year }}</span></li>
+        {% if row.year or row.label %}
+          {% if cur_year %}{% include timeline-projects.html year=cur_year %}{% endif %}
+          {% assign cur_year = row.year %}
+      <li class="tl-year{% if row.label %} is-label{% endif %}"><span>{{ row.year | default: row.label }}</span></li>
         {% elsif row.milestone %}
       <li class="tl-milestone">
-        <p class="tl-inst">{{ row.milestone }}</p>
-        {% if row.detail %}<p class="tl-detail">{{ row.detail }}</p>{% endif %}
+        <div class="tl-card">
+          <span class="tl-kind">Education</span>
+          <p class="tl-inst">{{ row.milestone }}</p>
+          {% if row.detail %}<p class="tl-detail">{{ row.detail }}</p>{% endif %}
+        </div>
+      </li>
+        {% elsif row.role %}
+      <li class="tl-role">
+        <span class="tl-kind">Role</span>
+        <span class="tl-title">{{ row.role }}</span>
+        {% if row.org %}<span class="tl-sub">{{ row.org }}</span>{% endif %}
       </li>
         {% elsif row.paper %}
           {% assign p = site.research | where: "slug", row.paper | first %}
@@ -33,13 +50,15 @@ slug_class: about
           {% assign th = site.data.themes | where: "id", p.theme | first %}
       <li class="tl-paper">
         <a href="{{ p.url | relative_url }}">
+          <span class="tl-kind">{% if p.external %}Project{% else %}Paper{% endif %} · {{ th.title }}</span>
           <span class="tl-title">{{ p.title }}</span>
-          <span class="tl-meta">{{ th.title }}{% if p.credit %} · <span class="nowrap">{{ p.credit }}</span>{% endif %}</span>
+          {% if p.credit %}<span class="tl-sub">{{ p.credit }}</span>{% endif %}
         </a>
       </li>
           {% endif %}
         {% endif %}
       {% endfor %}
+      {% if cur_year %}{% include timeline-projects.html year=cur_year %}{% endif %}
     </ol>
   </div>
 </section>
@@ -48,39 +67,14 @@ slug_class: about
   <h2 id="approach-h" class="split-label">Approach</h2>
   <div class="split-body prose">
     <p>Across research, institution building, entrepreneurship, and public engagement, education has remained a consistent thread, from policy and organizational work to learning, technology, and opportunity.</p>
-    <p>I am drawn to work that connects research with practice and leads to something tangible, from a policy idea to a program, partnership, or new initiative.</p>
+    <p>I am drawn to work that <mark class="hl">connects research with practice</mark> and leads to something tangible, from a policy idea to a program, partnership, or new initiative.</p>
   </div>
 </section>
 
-<section class="wrap split" aria-labelledby="roles-h">
-  <h2 id="roles-h" class="split-label">Selected Roles</h2>
-  <ul class="split-body roles">
-    {% for r in site.data.roles %}
-    <li><span class="role">{{ r.role }}</span>{% if r.org %}<span class="org">{{ r.org }}</span>{% endif %}</li>
-    {% endfor %}
-  </ul>
-</section>
-
-<section class="wrap split" aria-labelledby="found-h">
-  <h2 id="found-h" class="split-label">Academic Foundations</h2>
-  <div class="split-body prose">
-    <p>My academic background brings together politics, quantitative analysis, and education, with an interest in the legal and institutional structures that shape public systems. This foundation has shaped the way I approach questions of institutions, evidence, learning, and technology.</p>
-    <p>My work connects these perspectives across education, opportunity, and mobility, with particular attention to policy, institutional decision-making, and the relationship between education and broader social and economic change.</p>
+<section class="wrap split" aria-labelledby="contact-h">
+  <h2 id="contact-h" class="split-label">Contact</h2>
+  <div class="split-body about-contact">
+    <p class="contact-areas">Education · Research · Partnerships</p>
+    <a class="contact-email" href="mailto:{{ site.email }}">{{ site.email }}</a>
   </div>
-</section>
-
-<section class="wrap split" aria-labelledby="edu-h">
-  <h2 id="edu-h" class="split-label">Across Education</h2>
-  <div class="split-body">
-    <p class="prose lead-in">My work in education spans public policy and institutional design, learning and technology, higher education, and pathways into work.</p>
-  </div>
-  <ul class="modules" aria-label="Scope of work in education">
-    {% for m in site.data.education_modules %}
-    <li class="module">
-      <span class="module-num">{{ forloop.index | prepend: "0" }}</span>
-      <h3>{{ m.title }}</h3>
-      <p>{{ m.text }}</p>
-    </li>
-    {% endfor %}
-  </ul>
 </section>

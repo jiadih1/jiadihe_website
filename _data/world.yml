@@ -4,6 +4,8 @@
 #   caption: one line: what / where / year
 #   alt:     description for screen readers (defaults to the caption)
 #   size:    l (wide, 2/3 row) | m (portrait, 1/3 row) | w (half row)
+#   year:    optional; with a year the photo also appears on the About timeline
+#   id:      optional short name (e.g. ncsd-forum) so the timeline can link to it
 #
 # The six entries below are PLACEHOLDERS until real photos arrive: replace
 # image/kicker/caption and delete `placeholder: true`.

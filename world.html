@@ -12,7 +12,7 @@ description: Selected talks, institutions, programs, collaborations, and public 
 
 <section class="wrap gallery" aria-label="Photographs">
   {% for w in site.data.world %}
-  <figure class="shot shot-{{ w.size | default: 'm' }}{% if w.placeholder %} is-placeholder{% endif %}">
+  <figure class="shot shot-{{ w.size | default: 'm' }}{% if w.placeholder %} is-placeholder{% endif %}"{% if w.id %} id="{{ w.id }}"{% endif %}>
     {% if w.image %}
       <img src="{{ w.image | relative_url }}" alt="{{ w.alt | default: w.caption | escape }}" loading="lazy">
     {% else %}
@@ -21,7 +21,7 @@ description: Selected talks, institutions, programs, collaborations, and public 
     {% if w.caption or w.kicker %}
     <figcaption>
       {% if w.kicker %}<span class="shot-kicker">{{ w.kicker }}</span>{% endif %}
-      {% if w.caption %}<span class="shot-caption">{{ w.caption }}</span>{% endif %}
+      {% if w.caption %}<span class="shot-caption">{{ w.caption }}{% if w.year %} · {{ w.year }}{% endif %}</span>{% endif %}
     </figcaption>
     {% endif %}
   </figure>

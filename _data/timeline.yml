@@ -1,12 +1,18 @@
 # About-page timeline, top to bottom (oldest first).
-# Three kinds of rows:
+# Row kinds:
 #   - year: 2022                       a year marker on the axis
-#   - milestone: Institution           an education step (detail: one line under it)
-#     detail: ...
+#   - label: Ongoing                   a marker with text instead of a year
+#   - milestone: Institution           an education step
+#     detail: ...                      (one line under it)
+#   - role: Admissions Ambassador      a role (org: optional second line)
+#     org: Harvard Graduate School of Education
 #   - paper: <slug>                    links to _research/<slug>.md (title and theme come from there)
+# In the World photos that have a `year:` in _data/world.yml are added at the
+# end of that year automatically.
 #
-# Dates come from her own files: the date typed on the document where there is
-# one, otherwise the PDF/Word creation date. Rows marked "confirm" are best guesses.
+# Paper dates come from her own files: the date typed on the document where there
+# is one, otherwise the PDF/Word creation date. Everything marked CONFIRM is a
+# best guess that still needs her check.
 
 - milestone: Georgetown University
   detail: Government, Statistics, and Women’s and Gender Studies
@@ -29,6 +35,11 @@
 - milestone: Harvard Graduate School of Education
   detail: M.Ed. in Education Policy and Analysis, with additional study at Harvard Kennedy School and MIT
 
+- role: Admissions Ambassador                        # CONFIRM: assumed during the M.Ed. year
+  org: Harvard Graduate School of Education
+- role: Committee Member                             # CONFIRM: assumed during her time at Harvard
+  org: Harvard Politics and Economics Association
+- role: Georgetown University Admissions Interviewer # CONFIRM: assumed alumni interviewer, from 2023
 - paper: rethinking-the-gaokao                       # Nov 2023 (PDF date)
 - paper: wearable-health-privacy                     # Dec 2023 (Word file date)
 - paper: students-emotional-behavioral-disorders     # 15 Dec 2023 (on document)
@@ -36,7 +47,17 @@
 - year: 2024
 - paper: ai-reskilling-upskilling-initiative         # 15 Apr 2024 (on document)
 - paper: writing-skills-chinese-students             # May 2024 (Word file date)
-- paper: political-institutions-economic-outcomes    # confirm: PDF dated Sep 2024, but the cover says Georgetown
+- role: Harvard College Admissions Interviewer       # CONFIRM: assumed alumni interviewer, after the M.Ed.
+- role: Research Collaborator                        # CONFIRM: placed with the Sep 2024 Georgetown paper
+  org: Georgetown University
+- paper: political-institutions-economic-outcomes    # CONFIRM: PDF dated Sep 2024, but the cover says Georgetown
+- role: Executive Director                           # CONFIRM: year unknown
+  org: National Center for Sustainable Development
+- role: Founder & Founding Executive                 # CONFIRM: year unknown
+  org: Education Ventures
 
 - year: 2026
 - paper: event-summary-traces-measurement            # Sep 2026 (file date; cites 2025 work)
+
+- label: Ongoing
+- role: Public Speaker                               # CONFIRM: no single year
