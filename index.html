@@ -7,9 +7,46 @@ slug_class: about
   <p class="opening">My work sits across education, policy, business, and public institutions, shaped by both academic training and <span class="nowrap">hands-on</span> institution building.</p>
 </section>
 
-<section class="wrap split">
+<section class="wrap split" aria-labelledby="edu-bg-h">
+  <h2 id="edu-bg-h" class="split-label">Education</h2>
   <div class="split-body prose">
     <p>I studied Government, Statistics, and Women’s and Gender Studies at Georgetown University before completing my M.Ed. in Education Policy and Analysis at the Harvard Graduate School of Education, with additional study at Harvard Kennedy School and MIT.</p>
+  </div>
+</section>
+
+<section class="wrap split" aria-labelledby="tl-h">
+  <h2 id="tl-h" class="split-label">Timeline</h2>
+  <div class="split-body">
+    <p class="tl-hint">Research and writing by year. Each title opens the paper.</p>
+    <ol class="timeline">
+      {% for row in site.data.timeline %}
+        {% if row.year %}
+      <li class="tl-year"><span>{{ row.year }}</span></li>
+        {% elsif row.milestone %}
+      <li class="tl-milestone">
+        <p class="tl-inst">{{ row.milestone }}</p>
+        {% if row.detail %}<p class="tl-detail">{{ row.detail }}</p>{% endif %}
+      </li>
+        {% elsif row.paper %}
+          {% assign p = site.research | where: "slug", row.paper | first %}
+          {% if p %}
+          {% assign th = site.data.themes | where: "id", p.theme | first %}
+      <li class="tl-paper">
+        <a href="{{ p.url | relative_url }}">
+          <span class="tl-title">{{ p.title }}</span>
+          <span class="tl-meta">{{ th.title }}{% if p.credit %} · <span class="nowrap">{{ p.credit }}</span>{% endif %}</span>
+        </a>
+      </li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="wrap split" aria-labelledby="approach-h">
+  <h2 id="approach-h" class="split-label">Approach</h2>
+  <div class="split-body prose">
     <p>Across research, institution building, entrepreneurship, and public engagement, education has remained a consistent thread, from policy and organizational work to learning, technology, and opportunity.</p>
     <p>I am drawn to work that connects research with practice and leads to something tangible, from a policy idea to a program, partnership, or new initiative.</p>
   </div>

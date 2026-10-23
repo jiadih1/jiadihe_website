@@ -10,6 +10,7 @@ PDF inline with an "Open PDF" button.
 | What | File |
 | --- | --- |
 | About page text | `index.html` |
+| About timeline (years, education steps, which papers sit where) | `_data/timeline.yml` |
 | Selected Roles list | `_data/roles.yml` |
 | "Across Education" six modules | `_data/education_modules.yml` |
 | The six research themes | `_data/themes.yml` |

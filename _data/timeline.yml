@@ -1,0 +1,42 @@
+# About-page timeline, top to bottom (oldest first).
+# Three kinds of rows:
+#   - year: 2022                       a year marker on the axis
+#   - milestone: Institution           an education step (detail: one line under it)
+#     detail: ...
+#   - paper: <slug>                    links to _research/<slug>.md (title and theme come from there)
+#
+# Dates come from her own files: the date typed on the document where there is
+# one, otherwise the PDF/Word creation date. Rows marked "confirm" are best guesses.
+
+- milestone: Georgetown University
+  detail: Government, Statistics, and Women’s and Gender Studies
+
+- year: 2021
+- paper: law-agreements-international-relations      # Dec 2021 (PDF date)
+- paper: political-economy-inequality-america        # Dec 2021 (PDF date)
+
+- year: 2022
+- paper: race-and-disability                         # 28 Apr 2022 (on document)
+- paper: language-and-identity                       # 29 Apr 2022 (on document)
+- paper: disability-justice-is-love                  # May 2022 (file date)
+- paper: construction-ethnicity-race-nation          # 13 May 2022 (on document)
+- paper: data-collection-accountability              # 1 Oct 2022 (on document)
+- paper: post-katrina-charter-schools                # Nov 2022 (Word file date)
+
+- year: 2023
+- paper: aristotle-best-regime                       # May 2023 (PDF date)
+
+- milestone: Harvard Graduate School of Education
+  detail: M.Ed. in Education Policy and Analysis, with additional study at Harvard Kennedy School and MIT
+
+- paper: rethinking-the-gaokao                       # Nov 2023 (PDF date)
+- paper: wearable-health-privacy                     # Dec 2023 (Word file date)
+- paper: students-emotional-behavioral-disorders     # 15 Dec 2023 (on document)
+
+- year: 2024
+- paper: ai-reskilling-upskilling-initiative         # 15 Apr 2024 (on document)
+- paper: writing-skills-chinese-students             # May 2024 (Word file date)
+- paper: political-institutions-economic-outcomes    # confirm: PDF dated Sep 2024, but the cover says Georgetown
+
+- year: 2026
+- paper: event-summary-traces-measurement            # Sep 2026 (file date; cites 2025 work)

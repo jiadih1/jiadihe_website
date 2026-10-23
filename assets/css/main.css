@@ -173,6 +173,38 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .module h3 { font-size: 1.36rem; line-height: 1.2; margin-bottom: 10px; color: var(--ink); }
 .module p { font-size: 1rem; line-height: 1.5; color: var(--ink-2); }
 
+/* timeline: years in the left gutter, one axis, papers and education steps on it */
+.tl-hint { font-family: var(--sans); font-size: 0.78rem; letter-spacing: 0.02em; color: var(--muted); margin-bottom: 26px; }
+.timeline { --tl-year: 5.4rem; --tl-axis: calc(var(--tl-year) + 20px); position: relative; }
+.timeline::before {
+  content: ""; position: absolute; left: var(--tl-axis); top: 8px; bottom: 10px; width: 1px; background: var(--rule);
+}
+.timeline li { position: relative; padding-left: calc(var(--tl-axis) + 28px); }
+.tl-year { padding-top: 30px; }
+.tl-year span {
+  position: absolute; left: 0; top: 34px; width: var(--tl-year); text-align: right;
+  font-size: 1.9rem; line-height: 1; font-weight: 330; letter-spacing: -0.01em; color: var(--accent);
+  font-variant-numeric: lining-nums;
+}
+.tl-paper a { display: block; padding: 9px 0; text-decoration: none; color: inherit; }
+.tl-paper::before {
+  content: ""; position: absolute; left: calc(var(--tl-axis) - 4px); top: 18px; width: 9px; height: 9px;
+  border-radius: 50%; background: var(--paper); border: 1.5px solid var(--muted); transition: background-color .2s, border-color .2s;
+}
+.tl-paper:hover::before { background: var(--accent); border-color: var(--accent); }
+.tl-title { display: block; font-size: 1.1rem; line-height: 1.35; color: var(--ink); transition: color .2s; text-wrap: pretty; }
+.tl-paper a:hover .tl-title { color: var(--accent); }
+.tl-meta { display: block; margin-top: 4px; font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); line-height: 1.5; }
+.tl-milestone { padding-top: 34px; padding-bottom: 10px; }
+.tl-milestone:first-child { padding-top: 0; }
+.tl-milestone::before {
+  content: ""; position: absolute; left: calc(var(--tl-axis) - 6px); top: 41px; width: 13px; height: 13px;
+  background: var(--ink); transform: rotate(45deg);
+}
+.tl-milestone:first-child::before { top: 7px; }
+.tl-inst { font-size: 1.4rem; line-height: 1.2; letter-spacing: -0.005em; color: var(--ink); }
+.tl-detail { margin-top: 5px; font-size: 1rem; line-height: 1.45; font-style: italic; color: var(--ink-2); max-width: 32em; }
+
 /* ---------- page heads ---------- */
 .page-head { padding-top: clamp(56px, 8vw, 112px); padding-bottom: clamp(36px, 5vw, 64px); }
 .page-title {
@@ -365,6 +397,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .modules { grid-template-columns: 1fr; }
   .module, .module:nth-child(2n), .module:not(:nth-child(3n+1)) { padding: 22px 0 24px; border-left: 0; min-height: 0; }
   .module-num { margin-bottom: 10px; }
+
+  .timeline { --tl-year: 0px; --tl-axis: 4px; }
+  .timeline li { padding-left: 30px; }
+  .tl-year { padding-top: 26px; }
+  .tl-year span { position: static; display: block; width: auto; text-align: left; font-size: 1.6rem; padding: 0 0 2px; }
 
   .theme-index ol { grid-template-columns: 1fr; }
   .theme-head { gap: 14px; }
